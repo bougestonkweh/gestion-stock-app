@@ -2,11 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const sqlite3 = require('sqlite3').verbose();
-
-// Définition du chemin de la base de données SQLite
+//
 const dbPath = path.join(app.getPath('userData'), 'database.sqlite');
-
-// Initialisation de la base de données SQLite
 let db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database', err);
@@ -21,8 +18,9 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         }
     });
 
@@ -32,7 +30,6 @@ function createWindow() {
 
 app.whenReady().then(createWindow);
 
-// Fonction pour enregistrer les articles
 function saveArticles(articles) {
     articles.forEach(article => {
         db.run('INSERT INTO articles (code, nom, unite, conso) VALUES (?, ?, ?, ?)', 
@@ -40,7 +37,6 @@ function saveArticles(articles) {
     });
 }
 
-// Exposer la fonction via IPC
 ipcMain.handle('save-articles', async (event, articles) => {
     saveArticles(articles);
 });

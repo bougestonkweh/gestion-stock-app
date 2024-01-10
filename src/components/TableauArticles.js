@@ -21,10 +21,8 @@ const TableauArticles = ({ articles }) => {
         setTypesLivraison(prev => ({ ...prev, [codeProduit]: newValue }));
     };
 
-    const { ipcRenderer } = window.require('electron');
-
     const saveData = () => {
-        ipcRenderer.invoke('save-articles', articles);
+        window.electron.invoke('save-articles', articles);
     };
 
     return (
