@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, TextField } from '@mui/material';
 
 const TableauArticles = ({ articles }) => {
-    const articlesTries = articles.slice().sort((a, b) => a.nomProduit.localeCompare(b.nomProduit));
     const [selections, setSelections] = useState({});
     const [quantites, setQuantites] = useState({});
     const [typesLivraison, setTypesLivraison] = useState({});
@@ -22,6 +21,12 @@ const TableauArticles = ({ articles }) => {
         setTypesLivraison(prev => ({ ...prev, [codeProduit]: newValue }));
     };
 
+    const { ipcRenderer } = window.require('electron');
+
+    const saveData = () => {
+        ipcRenderer.invoke('save-articles', articles);
+    };
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="tableau d'articles">
@@ -37,7 +42,7 @@ const TableauArticles = ({ articles }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {articlesTries.map((article) => (
+                    {articles.map((article) => (
                         <TableRow key={article.codeInterneProduit}>
                             <TableCell>{article.codeInterneProduit}</TableCell>
                             <TableCell>{article.nomProduit}</TableCell>
@@ -78,6 +83,7 @@ const TableauArticles = ({ articles }) => {
                     ))}
                 </TableBody>
             </Table>
+            <button onClick={saveData}>Enregistrer les Données</button>
         </TableContainer>
     );
 };
