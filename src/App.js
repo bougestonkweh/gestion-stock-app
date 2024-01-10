@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Container, BottomNavigation, BottomNavigationAction } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
+import NavigationIcon from './components/NavigationIcon'; // Importez le nouveau composant
 import ExcelUploader from './components/ExcelUploader';
 import SetupPage from './components/SetupPage';
 import './App.css';
@@ -18,14 +18,12 @@ function App() {
                         <Typography variant="h6" sx={{ flexGrow: 1 }}>
                             Gestion de Stock
                         </Typography>
-                        <Link to="/parametres" style={{ color: 'white', textDecoration: 'none' }}>
-                            <SettingsIcon />
-                        </Link>
+                        <NavigationIcon /> {/* Utilisez le nouveau composant ici */}
                     </Toolbar>
                 </AppBar>
                 <Container sx={{ marginTop: 2, marginBottom: 2 }}>
                     <Routes>
-                    <Route exact path="/" element={<h1>Page d'Accueil</h1>} />
+                        <Route exact path="/" element={<h1>Page d'Accueil</h1>} />
                         <Route path="/parametres" element={<SetupPage articles={articles} />} />
                     </Routes>
                 </Container>
